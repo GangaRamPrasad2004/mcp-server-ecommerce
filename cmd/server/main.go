@@ -7,7 +7,7 @@ import (
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/client"
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/mcp"
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/cart"
-	//"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/orders"
+	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/orders"
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/products"
 	"github.com/sirupsen/logrus"
 )
@@ -43,7 +43,7 @@ func main() {
 
 	products.NewProductToolset(toolRegistry, restClient, logger)
 	cart.NewCartToolset(toolRegistry, restClient, logger)
-	//orders.NewOrderToolset(toolRegistry, restClient, logger)
+	orders.NewOrderToolset(toolRegistry, restClient, logger)
 
 	logger.WithField("tool_count", len(toolRegistry.ListTools())).Info("Registered tools")
 

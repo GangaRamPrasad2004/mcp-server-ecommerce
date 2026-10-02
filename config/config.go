@@ -16,22 +16,21 @@ type Config struct {
 func LoadConfig() (*Config, error) {
 	_ = godotenv.Load()
 
-	authToken:= os.Getenv("AUTH_TOKEN")
+	authToken := os.Getenv("AUTH_TOKEN")
 	if authToken == "" {
-		authToken=os.Getenv("JWT_TOKEN")
+		authToken = os.Getenv("JWT_TOKEN")
 	}
 	config := &Config{
-		APIURL:    getEnv("API_URL","http://localhost:8080"),
+		APIURL:    getEnv("API_URL", "http://localhost:8080"),
 		AuthToken: authToken,
-		LogLevel:  getEnv("LOG_LEVEL","debug"),
-		Transport: getEnv("TRANSPORT","stdio"),
-
+		LogLevel:  getEnv("LOG_LEVEL", "debug"),
+		Transport: getEnv("TRANSPORT", "stdio"),
 	}
 	return config, nil
 
 }
 func getEnv(key, defaultValue string) string {
-	value:=os.Getenv(key)
+	value := os.Getenv(key)
 	if value == "" {
 		return defaultValue
 	}
