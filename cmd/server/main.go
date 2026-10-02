@@ -6,7 +6,7 @@ import (
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/config"
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/client"
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/mcp"
-	//"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/cart"
+	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/cart"
 	//"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/orders"
 	"github.com/GangaRamPrasad2004/mcp-server-Ecommerce/internal/tools/products"
 	"github.com/sirupsen/logrus"
@@ -18,12 +18,12 @@ func main() {
 	logger.SetOutput(os.Stderr) // Use stderr for logs (stdout is for JSON-RPC)
 	logger.SetFormatter(&logrus.JSONFormatter{})
 
-	config, err := config.LoadConfig()
+	c, err := config.LoadConfig()
 	if err != nil {
 		logger.WithError(err).Fatal("Failed to load configuration")
 	}
 
-	level, err := logrus.ParseLevel(config.LogLevel)
+	level, err := logrus.ParseLevel(c.LogLevel)
 	if err != nil {
 		logger.WithError(err).Warn("Invalid log level, using info")
 		level = logrus.InfoLevel
@@ -32,17 +32,17 @@ func main() {
 	logger.SetLevel(level)
 
 	logger.WithFields(logrus.Fields{
-		"api_url":               config.APIURL,
-		"log_level":             config.LogLevel,
-		"auth_token_configured": config.AuthToken != "",
+		"api_url":               c.APIURL,
+		"log_level":             c.LogLevel,
+		"auth_token_configured": c.AuthToken != "",
 	}).Info("Starting MCP E-commerce Server")
 
-	restClient := client.NewRestClient(config.APIURL, config.AuthToken, logger)
+	restClient := client.NewRestClient(c.APIURL, c.AuthToken, logger)
 
 	toolRegistry := mcp.NewRegistry(logger)
 
 	products.NewProductToolset(toolRegistry, restClient, logger)
-	//cart.NewCartToolset(toolRegistry, restClient, logger)
+	cart.NewCartToolset(toolRegistry, restClient, logger)
 	//orders.NewOrderToolset(toolRegistry, restClient, logger)
 
 	logger.WithField("tool_count", len(toolRegistry.ListTools())).Info("Registered tools")
